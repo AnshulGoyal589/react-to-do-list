@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useState} from 'react'
+import { v4 as uuid } from 'uuid';
+import TodoApp from './Components/TodoApp';
 
-function App() {
+const allTodos=[
+  {
+    id:uuid(),
+    task:'eat'
+  },
+  {
+    id:uuid(),
+    task:'sleep'
+  },
+  {
+    id:uuid(),
+    task:'code'
+  },
+  {
+    id:uuid(),
+    task:'repeat'
+  }
+]
+
+const App = () => {
+
+  if(!localStorage.getItem("list")) localStorage.setItem("list",JSON.stringify(allTodos));
+
+  let [allTodosList,setAllTodos]=useState(allTodos);
+
+  const addElement=(newTask)=>{
+
+    const newLi={
+      id:uuid(),
+      task:newTask
+    }
+
+    const updatedTodos=[ ...allTodos,JSON.stringify(newLi) ];
+    setAllTodos(updatedTodos);
+    localStorage.setItem("list",JSON.stringify(allTodosList))
+
+
+
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <TodoApp allTodos={allTodos} addElement={addElement}/>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
